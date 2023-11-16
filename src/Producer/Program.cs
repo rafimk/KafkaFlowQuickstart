@@ -3,6 +3,7 @@ using KafkaFlow.Producers;
 using KafkaFlow.Serializer;
 using KafkaFlow;
 using Producer;
+using Confluent.Kafka;
 
 var services = new ServiceCollection();
 
@@ -19,6 +20,8 @@ services.AddKafka(
                 .AddProducer(
                     producerName,
                     producer => producer
+                    .WithCompression(CompressionType.Gzip)
+                    .WithAcks(KafkaFlow.Acks.All)
                         .DefaultTopic(topicName)
                         .AddMiddlewares(m =>
                             m.AddSerializer<JsonCoreSerializer>()
